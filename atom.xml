@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2017-07-02T15:51:34.376Z</updated>
+  <updated>2017-07-02T17:03:25.864Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -20,13 +20,12 @@
     <link href="http://yoursite.com/2017/06/25/%E9%80%9A%E8%BF%87JVM%E7%90%86%E8%A7%A3%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B/"/>
     <id>http://yoursite.com/2017/06/25/通过JVM理解函数调用过程/</id>
     <published>2017-06-25T15:50:57.000Z</published>
-    <updated>2017-07-02T15:51:34.376Z</updated>
+    <updated>2017-07-02T17:03:25.864Z</updated>
     
     <content type="html"><![CDATA[<h2 id="一个函数的调用过程"><a href="#一个函数的调用过程" class="headerlink" title="一个函数的调用过程"></a>一个函数的调用过程</h2><p>代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public class Main &#123;</div><div class="line">	public static void main(String args[]) &#123;</div><div class="line">		int a = 1;</div><div class="line">		int b = 2;</div><div class="line">		int t = a + b;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 <p>首先我们先看字节码:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public static void main(java.lang.String[]);</div><div class="line">  Code:</div><div class="line">     0: iconst_1</div><div class="line">     1: istore_1</div><div class="line">     2: iconst_2</div><div class="line">     3: istore_2</div><div class="line">     4: iload_1</div><div class="line">     5: iload_2</div><div class="line">     6: iadd</div><div class="line">     7: istore_3</div><div class="line">     8: return</div></pre></td></tr></table></figure>
-<p>虚拟机会开辟一段内存做为栈帧.栈帧上有局部变量表,还有操作数栈.暗蓝色代表局部变量表:<br><img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/8a3cc212929b4b3aa6c9c2270e152926-image.png" alt="8a3cc212929b4b3aa6c9c2270e152926-image.png"> </p>
-<p>0: iconst1: 将常量1放入操作数栈顶<br> <img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/6424c43ae6a844d4b6e35529661c81e6-image.png" alt="6424c43ae6a844d4b6e35529661c81e6-image.png"> </p>
+<p>虚拟机会开辟一段内存做为栈帧.栈帧上有局部变量表,还有操作数栈.暗蓝色代表局部变量表:<br><img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/8a3cc212929b4b3aa6c9c2270e152926-image.png" alt="8a3cc212929b4b3aa6c9c2270e152926-image.png"><br><a id="more"></a><br>0: iconst1: 将常量1放入操作数栈顶<br> <img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/6424c43ae6a844d4b6e35529661c81e6-image.png" alt="6424c43ae6a844d4b6e35529661c81e6-image.png"> </p>
 <p>1: istore1: 取出栈顶值(出栈操作),放入局部变量表第一个位置,这时frame栈帧 变成了这样:<br> <img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/ec8759eb4b27445fbacbdd5e518cd3a5-image.png" alt="ec8759eb4b27445fbacbdd5e518cd3a5-image.png"> </p>
 <p>2,3步同理<br>4,5 iload; 取出对应局部变量表的值,并存入操作栈顶 (取a值1送入操作栈顶,然后取b值2送入操作栈顶),现在变为这样<br><img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/160634e2c2db47b1beaae961d35080d7-image.png" alt="160634e2c2db47b1beaae961d35080d7-image.png"> </p>
 <p>6 iadd: 对操作栈顶2个数据做出栈操作,求和后送入栈顶,结果为操作栈只有一个数,3<br><img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/36109212479444fb8e44bc0fcf8d25ea-image.png" alt="36109212479444fb8e44bc0fcf8d25ea-image.png"> </p>
@@ -39,7 +38,10 @@
     
     <summary type="html">
     
-      &lt;h2 id=&quot;一个函数的调用过程&quot;&gt;&lt;a href=&quot;#一个函数的调用过程&quot; class=&quot;headerlink&quot; title=&quot;一个函数的调用过程&quot;&gt;&lt;/a&gt;一个函数的调用过程&lt;/h2&gt;&lt;p&gt;代码:&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;ta
+      &lt;h2 id=&quot;一个函数的调用过程&quot;&gt;&lt;a href=&quot;#一个函数的调用过程&quot; class=&quot;headerlink&quot; title=&quot;一个函数的调用过程&quot;&gt;&lt;/a&gt;一个函数的调用过程&lt;/h2&gt;&lt;p&gt;代码:&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;public class Main &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;	public static void main(String args[]) &amp;#123;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;		int a = 1;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;		int b = 2;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;		int t = a + b;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;	&amp;#125;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;&amp;#125;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;首先我们先看字节码:&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;6&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;7&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;8&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;9&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;10&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;11&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;public static void main(java.lang.String[]);&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;  Code:&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;     0: iconst_1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;     1: istore_1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;     2: iconst_2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;     3: istore_2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;     4: iload_1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;     5: iload_2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;     6: iadd&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;     7: istore_3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;     8: return&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+&lt;p&gt;虚拟机会开辟一段内存做为栈帧.栈帧上有局部变量表,还有操作数栈.暗蓝色代表局部变量表:&lt;br&gt;&lt;img src=&quot;//os3e5ayd1.bkt.clouddn.com//file/2017/6/8a3cc212929b4b3aa6c9c2270e152926-image.png&quot; alt=&quot;8a3cc212929b4b3aa6c9c2270e152926-image.png&quot;&gt;&lt;br&gt;
     
     </summary>
     
@@ -55,7 +57,7 @@
     <link href="http://yoursite.com/2017/06/20/Java%E7%9F%A5%E8%AF%86%E7%82%B9%E5%BD%92%E7%BA%B3-one/"/>
     <id>http://yoursite.com/2017/06/20/Java知识点归纳-one/</id>
     <published>2017-06-19T16:00:08.000Z</published>
-    <updated>2017-07-02T16:29:48.967Z</updated>
+    <updated>2017-07-02T17:02:50.621Z</updated>
     
     <content type="html"><![CDATA[<h2 id="IO流-适配器-装饰器"><a href="#IO流-适配器-装饰器" class="headerlink" title="IO流, 适配器, 装饰器"></a>IO流, 适配器, 装饰器</h2><p>Java有以下四种抽象流类型</p>
 <ul>
@@ -67,7 +69,7 @@
 </li>
 </ul>
 <h3 id="Java中的IO流图解"><a href="#Java中的IO流图解" class="headerlink" title="Java中的IO流图解"></a>Java中的IO流图解</h3><p><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170703/LJlA0D56k1.png?imageslim" alt="mark"></p>
-<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170703/FD85D8918h.png?imageslim" alt="mark"></p>
+<h2 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h2><p><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170703/FD85D8918h.png?imageslim" alt="mark"><br><a id="more"></a></p>
 <ul>
 <li>可查异常（checked exceptions）<blockquote>
 <p>　除了RuntimeException及其子类以外，其他的Exception类及其子类都属于可查异常.这种异常的特点是Java编译器会检查它，也就是说，当程序中可能出现这类异常，要么用try-catch语句捕获它，要么用throws子句声明抛出它，否则编译不会通过．</p>
@@ -127,7 +129,15 @@
     
       &lt;h2 id=&quot;IO流-适配器-装饰器&quot;&gt;&lt;a href=&quot;#IO流-适配器-装饰器&quot; class=&quot;headerlink&quot; title=&quot;IO流, 适配器, 装饰器&quot;&gt;&lt;/a&gt;IO流, 适配器, 装饰器&lt;/h2&gt;&lt;p&gt;Java有以下四种抽象流类型&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;p
+&lt;li&gt;&lt;p&gt;InputStream, OutputStream: 能自动解码并向我们提供字符读写的接口.这个类打通了字节处理与字符处理之间的堑沟.这个类就叫做适配器类能自动解码并向我们提供字符读写的接口.这个类打通了字节处理与字符处理之间的堑沟.这个类就叫做适配器类.&lt;/p&gt;
+&lt;h3 id=&quot;适配模式&quot;&gt;&lt;a href=&quot;#适配模式&quot; class=&quot;headerlink&quot; title=&quot;适配模式&quot;&gt;&lt;/a&gt;适配模式&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;http://os3e5ayd1.bkt.clouddn.com/blog/170703/2Ac228C7Ji.png?imageslim&quot; alt=&quot;mark&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Reader, Writer: 现在已经有了字节码处理的 InputStream，我们的目标接口是可以处理字符的Reader, 所以我们就需要一个可以把字节码转成字符的 InputStreamReader.这就是适配器.&lt;/p&gt;
+&lt;h3 id=&quot;装饰模式&quot;&gt;&lt;a href=&quot;#装饰模式&quot; class=&quot;headerlink&quot; title=&quot;装饰模式&quot;&gt;&lt;/a&gt;装饰模式&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;http://os3e5ayd1.bkt.clouddn.com/blog/170703/8AeC8gcbBG.png?imageslim&quot; alt=&quot;mark&quot;&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&quot;Java中的IO流图解&quot;&gt;&lt;a href=&quot;#Java中的IO流图解&quot; class=&quot;headerlink&quot; title=&quot;Java中的IO流图解&quot;&gt;&lt;/a&gt;Java中的IO流图解&lt;/h3&gt;&lt;p&gt;&lt;img src=&quot;http://os3e5ayd1.bkt.clouddn.com/blog/170703/LJlA0D56k1.png?imageslim&quot; alt=&quot;mark&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;异常&quot;&gt;&lt;a href=&quot;#异常&quot; class=&quot;headerlink&quot; title=&quot;异常&quot;&gt;&lt;/a&gt;异常&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;http://os3e5ayd1.bkt.clouddn.com/blog/170703/FD85D8918h.png?imageslim&quot; alt=&quot;mark&quot;&gt;&lt;br&gt;
     
     </summary>
     
@@ -143,13 +153,14 @@
     <link href="http://yoursite.com/2017/06/17/2%E9%81%93%E5%BE%88%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E8%BF%9B%E5%88%B6%E9%A2%98/"/>
     <id>http://yoursite.com/2017/06/17/2道很有意思的进制题/</id>
     <published>2017-06-17T11:49:35.000Z</published>
-    <updated>2017-07-02T15:50:22.426Z</updated>
+    <updated>2017-07-02T17:02:34.583Z</updated>
     
     <content type="html"><![CDATA[<blockquote>
 <p>1.一共有10只老鼠，1000只水杯，杯子里都盛着水，只有一个杯中是有毒的液体，这种毒 液老鼠喝下去以后，一个星期就会死掉。现在要求使用这10只老鼠，在一个星期之内找出盛着毒液的杯子。</p>
 </blockquote>
 <p>分析一下，这道题目其实是一道和二进制相关的题目。由于只能在一个星期内完成任务，那就说明不能进行重复的实验。这样的话，由于10只老鼠在一个星期以后的状态只能是死亡或者存活两种状态，根据乘法原理，我们知道，10个单位的两种状态，可能出现的所有可能是2^10 = 1024。足够编码1000个杯子了。也就是说，我们现在的任务是把1000个杯子 与10只老鼠的死和活的组合一一对应起来。如果把1到1000表示成二进制，那么答案就很明显了。</p>
 <p>将1到1000共一千个数，都转换成二进制编码。对于数字A，如果它的二进制的最低位 是1，那么就让1号老鼠喝一点这个杯子里的液体，如果是0就不喝。A的二进制的倒数第二低位如果是1，那么编号为2的老鼠就喝，否则不喝。依次类推。直到最高位如果是1，那么编号为10的老鼠就喝，否则该老鼠不喝。一个星期以后观察结果，如果编号为x的老鼠死掉 了，那么就从低向高数x位，在那个位置上标1，其他的位置标0。例如，如果只有2号和4号 老鼠死掉了，那么记录的结果就是“00 0000 1010”，这样一个二进制数。把它转成十进制是10，这就意味着10号杯子里装的是毒液，其他杯子则是水。</p>
+<a id="more"></a>
 <blockquote>
 <p>2.有一架天平，它有20个砝码，这20个砝码的重量分别为 1,3,9,27···3^19。只要被称的物品的重量为位于区间 [1,(3^20−1)/2] 的整数，就可以使用这架天平进行称量。假设物品一直放在天平的左边，现在给出每个物品的重量，请打印出称量的方案。输出格式为两组数字，第一组代表天平左边要放的砝码，第二组代表天平右边要放的砝码。这两组数中间用空格隔开。每一组内部的数使用逗号隔开。如果天平的某一边不需要放砝码，那就打印 empty。<br>例如，输入是9，输出是 empty 9，代表左边不需要额外的砝码，而右边需要放一个重量为 9 的砝码。 输入是4，输出是empty 1,3。</p>
 </blockquote>
@@ -164,7 +175,8 @@
       &lt;blockquote&gt;
 &lt;p&gt;1.一共有10只老鼠，1000只水杯，杯子里都盛着水，只有一个杯中是有毒的液体，这种毒 液老鼠喝下去以后，一个星期就会死掉。现在要求使用这10只老鼠，在一个星期之内找出盛着毒液的杯子。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;分析一下，这道题目其
+&lt;p&gt;分析一下，这道题目其实是一道和二进制相关的题目。由于只能在一个星期内完成任务，那就说明不能进行重复的实验。这样的话，由于10只老鼠在一个星期以后的状态只能是死亡或者存活两种状态，根据乘法原理，我们知道，10个单位的两种状态，可能出现的所有可能是2^10 = 1024。足够编码1000个杯子了。也就是说，我们现在的任务是把1000个杯子 与10只老鼠的死和活的组合一一对应起来。如果把1到1000表示成二进制，那么答案就很明显了。&lt;/p&gt;
+&lt;p&gt;将1到1000共一千个数，都转换成二进制编码。对于数字A，如果它的二进制的最低位 是1，那么就让1号老鼠喝一点这个杯子里的液体，如果是0就不喝。A的二进制的倒数第二低位如果是1，那么编号为2的老鼠就喝，否则不喝。依次类推。直到最高位如果是1，那么编号为10的老鼠就喝，否则该老鼠不喝。一个星期以后观察结果，如果编号为x的老鼠死掉 了，那么就从低向高数x位，在那个位置上标1，其他的位置标0。例如，如果只有2号和4号 老鼠死掉了，那么记录的结果就是“00 0000 1010”，这样一个二进制数。把它转成十进制是10，这就意味着10号杯子里装的是毒液，其他杯子则是水。&lt;/p&gt;
     
     </summary>
     
@@ -215,7 +227,7 @@
     <link href="http://yoursite.com/2017/06/02/Java-%E5%8F%8D%E5%B0%84/"/>
     <id>http://yoursite.com/2017/06/02/Java-反射/</id>
     <published>2017-06-01T17:21:28.000Z</published>
-    <updated>2017-07-02T15:47:34.754Z</updated>
+    <updated>2017-07-02T17:02:10.982Z</updated>
     
     <content type="html"><![CDATA[<h1 id="1-Class类"><a href="#1-Class类" class="headerlink" title="1. Class类"></a>1. Class类</h1><p>任何一个类都是Class类的实例对象，这个实例对象有 三种表示方式:</p>
 <ul>
@@ -228,7 +240,7 @@
 </ul>
 <p>既然是Class类的实例,那么为什么不用new呢?因为 java.lang.Class类的构造方法是私有的.</p>
 <p>通过类类型来建立该类的实例:<br>Student stu = (Student)c1.newInstance();//前提是必须要有无参的构造方法，因为该语句会去调用其无参构造方法。该语句会抛出异常。</p>
-<h1 id="2-动态加载类"><a href="#2-动态加载类" class="headerlink" title="2. 动态加载类"></a>2. 动态加载类</h1><h2 id="1、-编译时加载类是静态加载类"><a href="#1、-编译时加载类是静态加载类" class="headerlink" title="1、 编译时加载类是静态加载类"></a>1、 编译时加载类是静态加载类</h2><p>new 创建对象是静态加载类，在编译时刻就需要加载所有可用使用到的类，如果有一个用不了，那么整个文件都无法通过编译</p>
+<h1 id="2-动态加载类"><a href="#2-动态加载类" class="headerlink" title="2. 动态加载类"></a>2. 动态加载类</h1><h2 id="1、-编译时加载类是静态加载类"><a href="#1、-编译时加载类是静态加载类" class="headerlink" title="1、 编译时加载类是静态加载类"></a>1、 编译时加载类是静态加载类</h2><p>new 创建对象是静态加载类，在编译时刻就需要加载所有可用使用到的类，如果有一个用不了，那么整个文件都无法通过编译<br><a id="more"></a></p>
 <h2 id="2、-运行时加载类是动态加载类"><a href="#2、-运行时加载类是动态加载类" class="headerlink" title="2、 运行时加载类是动态加载类"></a>2、 运行时加载类是动态加载类</h2><p>Class c = Class.forName(“类的全名”)，不仅表示了类的类型，还表示了动态加载类，编译不会报错，在运行时才会加载，使用接口标准能更方便动态加载类的实现。功能性的类尽量使用动态加载，而不用静态加载。</p>
 <p>许多程序的在线升级，并不需要重新编译文件了，只是动态的加载新的东西</p>
 <h1 id="3-获取方法信息"><a href="#3-获取方法信息" class="headerlink" title="3. 获取方法信息"></a>3. 获取方法信息</h1><h2 id="1、基本的数据类型，void关键字都存在类类型"><a href="#1、基本的数据类型，void关键字都存在类类型" class="headerlink" title="1、基本的数据类型，void关键字都存在类类型"></a>1、基本的数据类型，void关键字都存在类类型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1 Class c1 =int.class;//int的类类型</div><div class="line">2 Class c2 =String.class;//String类的类类型，可以理解为编译生成的那个String.class字节码文件，</div><div class="line">3 //当然，这并不是官方的说法</div><div class="line">4 Class c3 =double.class;</div><div class="line">5 Class c4 =Double.class;</div><div class="line">6 Class c5 =void.class;</div></pre></td></tr></table></figure>
@@ -250,7 +262,16 @@
     
       &lt;h1 id=&quot;1-Class类&quot;&gt;&lt;a href=&quot;#1-Class类&quot; class=&quot;headerlink&quot; title=&quot;1. Class类&quot;&gt;&lt;/a&gt;1. Class类&lt;/h1&gt;&lt;p&gt;任何一个类都是Class类的实例对象，这个实例对象有 三种表示方式:&lt;/p&gt;
 &lt;ul&gt;
-
+&lt;li&gt;&lt;p&gt;Class c1 = Student.class;//实际告诉我们任何一个类都有一个隐含的静态成员变量class（知道类名时用）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Class c2 = stu.getClass();//已知该类的对象通过getClass方法（知道对象时用）&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Class c3 = Class.forName(“类的全名”);//会有一个ClassNotFoundException异常&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;既然是Class类的实例,那么为什么不用new呢?因为 java.lang.Class类的构造方法是私有的.&lt;/p&gt;
+&lt;p&gt;通过类类型来建立该类的实例:&lt;br&gt;Student stu = (Student)c1.newInstance();//前提是必须要有无参的构造方法，因为该语句会去调用其无参构造方法。该语句会抛出异常。&lt;/p&gt;
+&lt;h1 id=&quot;2-动态加载类&quot;&gt;&lt;a href=&quot;#2-动态加载类&quot; class=&quot;headerlink&quot; title=&quot;2. 动态加载类&quot;&gt;&lt;/a&gt;2. 动态加载类&lt;/h1&gt;&lt;h2 id=&quot;1、-编译时加载类是静态加载类&quot;&gt;&lt;a href=&quot;#1、-编译时加载类是静态加载类&quot; class=&quot;headerlink&quot; title=&quot;1、 编译时加载类是静态加载类&quot;&gt;&lt;/a&gt;1、 编译时加载类是静态加载类&lt;/h2&gt;&lt;p&gt;new 创建对象是静态加载类，在编译时刻就需要加载所有可用使用到的类，如果有一个用不了，那么整个文件都无法通过编译&lt;br&gt;
     
     </summary>
     
@@ -298,10 +319,10 @@
     <link href="http://yoursite.com/2017/05/15/HashTable%E5%92%8CHashMap%E5%8C%BA%E5%88%AB/"/>
     <id>http://yoursite.com/2017/05/15/HashTable和HashMap区别/</id>
     <published>2017-05-15T05:21:23.000Z</published>
-    <updated>2017-07-02T15:44:41.307Z</updated>
+    <updated>2017-07-02T17:02:42.926Z</updated>
     
     <content type="html"><![CDATA[<h2 id="1-继承不同"><a href="#1-继承不同" class="headerlink" title="1.继承不同"></a>1.继承不同</h2><p>public class Hashtable extends Dictionary implements Map<br>public class HashMap extends AbstractMap implements Map</p>
-<h2 id="2-Synchronized-关键字"><a href="#2-Synchronized-关键字" class="headerlink" title="2.Synchronized 关键字"></a>2.Synchronized 关键字</h2><p>Hashtable 中的方法是同步的，而HashMap中的方法在缺省情况下是非同步的。在多线程并发的环境下，可以直接使用Hashtable，但是要使用HashMap的话就要自己增加同步处理了。</p>
+<h2 id="2-Synchronized-关键字"><a href="#2-Synchronized-关键字" class="headerlink" title="2.Synchronized 关键字"></a>2.Synchronized 关键字</h2><p>Hashtable 中的方法是同步的，而HashMap中的方法在缺省情况下是非同步的。在多线程并发的环境下，可以直接使用Hashtable，但是要使用HashMap的话就要自己增加同步处理了。<br><a id="more"></a></p>
 <h2 id="3-Hashtable中，key和value都不允许出现null值"><a href="#3-Hashtable中，key和value都不允许出现null值" class="headerlink" title="3.Hashtable中，key和value都不允许出现null值"></a>3.Hashtable中，key和value都不允许出现null值</h2><p>在HashMap中，null可以作为键，这样的键只有一个；可以有一个或多个键所对应的值为null。当get()方法返回null值时，即可以表示 HashMap中没有该键，也可以表示该键所对应的值为null。因此，在HashMap中不能由get()方法来判断HashMap中是否存在某个键， 而应该用containsKey()方法来判断。</p>
 <h2 id="4-两个遍历方式的内部实现上不同"><a href="#4-两个遍历方式的内部实现上不同" class="headerlink" title="4.两个遍历方式的内部实现上不同"></a>4.两个遍历方式的内部实现上不同</h2><p>Hashtable、HashMap都使用了 Iterator。而由于历史原因，Hashtable还使用了Enumeration的方式 。</p>
 <h2 id="5-哈希值的使用不同"><a href="#5-哈希值的使用不同" class="headerlink" title="5.哈希值的使用不同"></a>5.哈希值的使用不同</h2><p>HashTable直接使用对象的hashCode。而HashMap重新计算hash值。</p>
@@ -310,7 +331,8 @@
     
     <summary type="html">
     
-      &lt;h2 id=&quot;1-继承不同&quot;&gt;&lt;a href=&quot;#1-继承不同&quot; class=&quot;headerlink&quot; title=&quot;1.继承不同&quot;&gt;&lt;/a&gt;1.继承不同&lt;/h2&gt;&lt;p&gt;public class Hashtable extends Dictionary implements M
+      &lt;h2 id=&quot;1-继承不同&quot;&gt;&lt;a href=&quot;#1-继承不同&quot; class=&quot;headerlink&quot; title=&quot;1.继承不同&quot;&gt;&lt;/a&gt;1.继承不同&lt;/h2&gt;&lt;p&gt;public class Hashtable extends Dictionary implements Map&lt;br&gt;public class HashMap extends AbstractMap implements Map&lt;/p&gt;
+&lt;h2 id=&quot;2-Synchronized-关键字&quot;&gt;&lt;a href=&quot;#2-Synchronized-关键字&quot; class=&quot;headerlink&quot; title=&quot;2.Synchronized 关键字&quot;&gt;&lt;/a&gt;2.Synchronized 关键字&lt;/h2&gt;&lt;p&gt;Hashtable 中的方法是同步的，而HashMap中的方法在缺省情况下是非同步的。在多线程并发的环境下，可以直接使用Hashtable，但是要使用HashMap的话就要自己增加同步处理了。&lt;br&gt;
     
     </summary>
     
@@ -330,7 +352,7 @@
     <link href="http://yoursite.com/2017/05/02/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%85%A8%E7%AB%99-%E7%BA%AFJ2EE%E5%AE%9E%E7%8E%B0/"/>
     <id>http://yoursite.com/2017/05/02/模仿天猫全站-纯J2EE实现/</id>
     <published>2017-05-02T15:14:40.000Z</published>
-    <updated>2017-07-02T15:32:28.247Z</updated>
+    <updated>2017-07-02T17:03:10.978Z</updated>
     
     <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a href="http://106.14.173.104/tianmao" target="_blank" rel="external">在线演示</a></p>
 <ol>
@@ -344,12 +366,25 @@
 <li>MySQL作为数据库，MD5加密敏感数据</li>
 </ol>
 <h2 id="截图"><a href="#截图" class="headerlink" title="截图"></a>截图</h2><p><img src="//os3e5ayd1.bkt.clouddn.com//file/2017/7/1afa755050c14bb98885a1b7b4f205cf-image.png" alt="1afa755050c14bb98885a1b7b4f205cf-image.png"><br><img src="//os3e5ayd1.bkt.clouddn.com//file/2017/7/d870ec7102ed4c02a7035929453a5a69-image.png" alt="d870ec7102ed4c02a7035929453a5a69-image.png"></p>
-<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><p><a href="https://github.com/lddahz789" target="_blank" rel="external">https://github.com/lddahz789</a><br>喜欢请star~</p>
+<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><a id="more"></a>
+<p><a href="https://github.com/lddahz789" target="_blank" rel="external">https://github.com/lddahz789</a><br>喜欢请star~</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://106.14.173.104/tianmao&quot; target=&quot;_blank&quot; rel=&quot;external&quot;
+      &lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://106.14.173.104/tianmao&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;在线演示&lt;/a&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;使用整套J2EE技术实现，关键逻辑Junit单元测试&lt;/li&gt;
+&lt;li&gt;Servlet + 反射 + Filter 来精简Servlet数量&lt;/li&gt;
+&lt;li&gt;采用webmagic框架爬取相关商品信息&lt;/li&gt;
+&lt;li&gt;采用Filter控制用户登录状态 &amp;amp; 转换字符编码&lt;/li&gt;
+&lt;li&gt;MVC设计模式贯穿前台以及后台&lt;/li&gt;
+&lt;li&gt;整个后台使用统一的分页机制&lt;/li&gt;
+&lt;li&gt;模块化Jsp设计，将复杂页面抽象成可重用模块&lt;/li&gt;
+&lt;li&gt;MySQL作为数据库，MD5加密敏感数据&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&quot;截图&quot;&gt;&lt;a href=&quot;#截图&quot; class=&quot;headerlink&quot; title=&quot;截图&quot;&gt;&lt;/a&gt;截图&lt;/h2&gt;&lt;p&gt;&lt;img src=&quot;//os3e5ayd1.bkt.clouddn.com//file/2017/7/1afa755050c14bb98885a1b7b4f205cf-image.png&quot; alt=&quot;1afa755050c14bb98885a1b7b4f205cf-image.png&quot;&gt;&lt;br&gt;&lt;img src=&quot;//os3e5ayd1.bkt.clouddn.com//file/2017/7/d870ec7102ed4c02a7035929453a5a69-image.png&quot; alt=&quot;d870ec7102ed4c02a7035929453a5a69-image.png&quot;&gt;&lt;/p&gt;
+&lt;h2 id=&quot;Git&quot;&gt;&lt;a href=&quot;#Git&quot; class=&quot;headerlink&quot; title=&quot;Git&quot;&gt;&lt;/a&gt;Git&lt;/h2&gt;
     
     </summary>
     
@@ -371,13 +406,13 @@
     <link href="http://yoursite.com/2016/08/22/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     <id>http://yoursite.com/2016/08/22/Java学习笔记/</id>
     <published>2016-08-22T14:53:53.000Z</published>
-    <updated>2017-07-02T15:12:53.304Z</updated>
+    <updated>2017-07-02T17:02:18.961Z</updated>
     
     <content type="html"><![CDATA[<ol>
 <li>异常捕获时,把需要关闭流的语句写在try()的括号里,之后会自动关闭流,不用再写多余的代码.</li>
 <li>反射:getField 只能获取public的，包括从父类继承来的字段。getDeclaredField 可以获取本类所有的字段，包括private的，但是不能获取继承来的字段. (注： 这里只能获取到private的字段，但并不能访问该private字段的值)</li>
 <li>JSP SERVLET中 getParameter 取的是表单发过来的值,getAttribute取的是自己setAttribute的值</li>
-<li>JSP forward是服务器跳转, redirect是客户端跳转</li>
+<li>JSP forward是服务器跳转, redirect是客户端跳转<a id="more"></a></li>
 <li>MyBatis中#与$的区别: #{para}会产生PreparedStatement的占位符 ${something}则直接将花括号里的something插入插入字符串</li>
 <li>接口中方法默认为 public abstract, 变量默认为 public static final</li>
 <li></li>
@@ -388,7 +423,9 @@
     
       &lt;ol&gt;
 &lt;li&gt;异常捕获时,把需要关闭流的语句写在try()的括号里,之后会自动关闭流,不用再写多余的代码.&lt;/li&gt;
-&lt;li&gt;反射:getField 只能获取public的，包括从父类继承来的字段。getDeclaredField 可以获取本类所有的字段，包括private的
+&lt;li&gt;反射:getField 只能获取public的，包括从父类继承来的字段。getDeclaredField 可以获取本类所有的字段，包括private的，但是不能获取继承来的字段. (注： 这里只能获取到private的字段，但并不能访问该private字段的值)&lt;/li&gt;
+&lt;li&gt;JSP SERVLET中 getParameter 取的是表单发过来的值,getAttribute取的是自己setAttribute的值&lt;/li&gt;
+&lt;li&gt;JSP forward是服务器跳转, redirect是客户端跳转
     
     </summary>
     

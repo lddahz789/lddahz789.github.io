@@ -102,7 +102,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/05/15/HashTable和HashMap区别/index.html">
 <meta property="og:site_name" content="Lyn的个人博客">
 <meta property="og:description" content="1.继承不同public class Hashtable extends Dictionary implements Mappublic class HashMap extends AbstractMap implements Map 2.Synchronized 关键字Hashtable 中的方法是同步的，而HashMap中的方法在缺省情况下是非同步的。在多线程并发的环境下，可以直接使用Hash">
-<meta property="og:updated_time" content="2017-07-02T15:44:41.307Z">
+<meta property="og:updated_time" content="2017-07-02T17:02:42.926Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HashTable和HashMap区别">
 <meta name="twitter:description" content="1.继承不同public class Hashtable extends Dictionary implements Mappublic class HashMap extends AbstractMap implements Map 2.Synchronized 关键字Hashtable 中的方法是同步的，而HashMap中的方法在缺省情况下是非同步的。在多线程并发的环境下，可以直接使用Hash">
@@ -392,7 +392,7 @@
 
       
         <h2 id="1-继承不同"><a href="#1-继承不同" class="headerlink" title="1.继承不同"></a>1.继承不同</h2><p>public class Hashtable extends Dictionary implements Map<br>public class HashMap extends AbstractMap implements Map</p>
-<h2 id="2-Synchronized-关键字"><a href="#2-Synchronized-关键字" class="headerlink" title="2.Synchronized 关键字"></a>2.Synchronized 关键字</h2><p>Hashtable 中的方法是同步的，而HashMap中的方法在缺省情况下是非同步的。在多线程并发的环境下，可以直接使用Hashtable，但是要使用HashMap的话就要自己增加同步处理了。</p>
+<h2 id="2-Synchronized-关键字"><a href="#2-Synchronized-关键字" class="headerlink" title="2.Synchronized 关键字"></a>2.Synchronized 关键字</h2><p>Hashtable 中的方法是同步的，而HashMap中的方法在缺省情况下是非同步的。在多线程并发的环境下，可以直接使用Hashtable，但是要使用HashMap的话就要自己增加同步处理了。<br><a id="more"></a></p>
 <h2 id="3-Hashtable中，key和value都不允许出现null值"><a href="#3-Hashtable中，key和value都不允许出现null值" class="headerlink" title="3.Hashtable中，key和value都不允许出现null值"></a>3.Hashtable中，key和value都不允许出现null值</h2><p>在HashMap中，null可以作为键，这样的键只有一个；可以有一个或多个键所对应的值为null。当get()方法返回null值时，即可以表示 HashMap中没有该键，也可以表示该键所对应的值为null。因此，在HashMap中不能由get()方法来判断HashMap中是否存在某个键， 而应该用containsKey()方法来判断。</p>
 <h2 id="4-两个遍历方式的内部实现上不同"><a href="#4-两个遍历方式的内部实现上不同" class="headerlink" title="4.两个遍历方式的内部实现上不同"></a>4.两个遍历方式的内部实现上不同</h2><p>Hashtable、HashMap都使用了 Iterator。而由于历史原因，Hashtable还使用了Enumeration的方式 。</p>
 <h2 id="5-哈希值的使用不同"><a href="#5-哈希值的使用不同" class="headerlink" title="5.哈希值的使用不同"></a>5.哈希值的使用不同</h2><p>HashTable直接使用对象的hashCode。而HashMap重新计算hash值。</p>

@@ -102,7 +102,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/06/02/Java-反射/index.html">
 <meta property="og:site_name" content="Lyn的个人博客">
 <meta property="og:description" content="1. Class类任何一个类都是Class类的实例对象，这个实例对象有 三种表示方式:  Class c1 = Student.class;//实际告诉我们任何一个类都有一个隐含的静态成员变量class（知道类名时用）  Class c2 = stu.getClass();//已知该类的对象通过getClass方法（知道对象时用）  Class c3 = Class.forName(“类的全名”)">
-<meta property="og:updated_time" content="2017-07-02T15:47:34.754Z">
+<meta property="og:updated_time" content="2017-07-02T17:02:10.982Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 反射">
 <meta name="twitter:description" content="1. Class类任何一个类都是Class类的实例对象，这个实例对象有 三种表示方式:  Class c1 = Student.class;//实际告诉我们任何一个类都有一个隐含的静态成员变量class（知道类名时用）  Class c2 = stu.getClass();//已知该类的对象通过getClass方法（知道对象时用）  Class c3 = Class.forName(“类的全名”)">
@@ -402,7 +402,7 @@
 </ul>
 <p>既然是Class类的实例,那么为什么不用new呢?因为 java.lang.Class类的构造方法是私有的.</p>
 <p>通过类类型来建立该类的实例:<br>Student stu = (Student)c1.newInstance();//前提是必须要有无参的构造方法，因为该语句会去调用其无参构造方法。该语句会抛出异常。</p>
-<h1 id="2-动态加载类"><a href="#2-动态加载类" class="headerlink" title="2. 动态加载类"></a>2. 动态加载类</h1><h2 id="1、-编译时加载类是静态加载类"><a href="#1、-编译时加载类是静态加载类" class="headerlink" title="1、 编译时加载类是静态加载类"></a>1、 编译时加载类是静态加载类</h2><p>new 创建对象是静态加载类，在编译时刻就需要加载所有可用使用到的类，如果有一个用不了，那么整个文件都无法通过编译</p>
+<h1 id="2-动态加载类"><a href="#2-动态加载类" class="headerlink" title="2. 动态加载类"></a>2. 动态加载类</h1><h2 id="1、-编译时加载类是静态加载类"><a href="#1、-编译时加载类是静态加载类" class="headerlink" title="1、 编译时加载类是静态加载类"></a>1、 编译时加载类是静态加载类</h2><p>new 创建对象是静态加载类，在编译时刻就需要加载所有可用使用到的类，如果有一个用不了，那么整个文件都无法通过编译<br><a id="more"></a></p>
 <h2 id="2、-运行时加载类是动态加载类"><a href="#2、-运行时加载类是动态加载类" class="headerlink" title="2、 运行时加载类是动态加载类"></a>2、 运行时加载类是动态加载类</h2><p>Class c = Class.forName(“类的全名”)，不仅表示了类的类型，还表示了动态加载类，编译不会报错，在运行时才会加载，使用接口标准能更方便动态加载类的实现。功能性的类尽量使用动态加载，而不用静态加载。</p>
 <p>许多程序的在线升级，并不需要重新编译文件了，只是动态的加载新的东西</p>
 <h1 id="3-获取方法信息"><a href="#3-获取方法信息" class="headerlink" title="3. 获取方法信息"></a>3. 获取方法信息</h1><h2 id="1、基本的数据类型，void关键字都存在类类型"><a href="#1、基本的数据类型，void关键字都存在类类型" class="headerlink" title="1、基本的数据类型，void关键字都存在类类型"></a>1、基本的数据类型，void关键字都存在类类型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1 Class c1 =int.class;//int的类类型</div><div class="line">2 Class c2 =String.class;//String类的类类型，可以理解为编译生成的那个String.class字节码文件，</div><div class="line">3 //当然，这并不是官方的说法</div><div class="line">4 Class c3 =double.class;</div><div class="line">5 Class c4 =Double.class;</div><div class="line">6 Class c5 =void.class;</div></pre></td></tr></table></figure>
