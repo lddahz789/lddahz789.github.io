@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Lyn的个人博客</title>
+  <subtitle>Java 学习历程</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://yoursite.com/"/>
+  <updated>2017-07-02T15:51:34.376Z</updated>
+  <id>http://yoursite.com/</id>
+  
+  <author>
+    <name>Lyn</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>通过JVM理解函数调用过程</title>
+    <link href="http://yoursite.com/2017/06/25/%E9%80%9A%E8%BF%87JVM%E7%90%86%E8%A7%A3%E5%87%BD%E6%95%B0%E8%B0%83%E7%94%A8%E8%BF%87%E7%A8%8B/"/>
+    <id>http://yoursite.com/2017/06/25/通过JVM理解函数调用过程/</id>
+    <published>2017-06-25T15:50:57.000Z</published>
+    <updated>2017-07-02T15:51:34.376Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="一个函数的调用过程"><a href="#一个函数的调用过程" class="headerlink" title="一个函数的调用过程"></a>一个函数的调用过程</h2><p>代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">public class Main &#123;</div><div class="line">	public static void main(String args[]) &#123;</div><div class="line">		int a = 1;</div><div class="line">		int b = 2;</div><div class="line">		int t = a + b;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>首先我们先看字节码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">public static void main(java.lang.String[]);</div><div class="line">  Code:</div><div class="line">     0: iconst_1</div><div class="line">     1: istore_1</div><div class="line">     2: iconst_2</div><div class="line">     3: istore_2</div><div class="line">     4: iload_1</div><div class="line">     5: iload_2</div><div class="line">     6: iadd</div><div class="line">     7: istore_3</div><div class="line">     8: return</div></pre></td></tr></table></figure>
+<p>虚拟机会开辟一段内存做为栈帧.栈帧上有局部变量表,还有操作数栈.暗蓝色代表局部变量表:<br><img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/8a3cc212929b4b3aa6c9c2270e152926-image.png" alt="8a3cc212929b4b3aa6c9c2270e152926-image.png"> </p>
+<p>0: iconst1: 将常量1放入操作数栈顶<br> <img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/6424c43ae6a844d4b6e35529661c81e6-image.png" alt="6424c43ae6a844d4b6e35529661c81e6-image.png"> </p>
+<p>1: istore1: 取出栈顶值(出栈操作),放入局部变量表第一个位置,这时frame栈帧 变成了这样:<br> <img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/ec8759eb4b27445fbacbdd5e518cd3a5-image.png" alt="ec8759eb4b27445fbacbdd5e518cd3a5-image.png"> </p>
+<p>2,3步同理<br>4,5 iload; 取出对应局部变量表的值,并存入操作栈顶 (取a值1送入操作栈顶,然后取b值2送入操作栈顶),现在变为这样<br><img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/160634e2c2db47b1beaae961d35080d7-image.png" alt="160634e2c2db47b1beaae961d35080d7-image.png"> </p>
+<p>6 iadd: 对操作栈顶2个数据做出栈操作,求和后送入栈顶,结果为操作栈只有一个数,3<br><img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/36109212479444fb8e44bc0fcf8d25ea-image.png" alt="36109212479444fb8e44bc0fcf8d25ea-image.png"> </p>
+<ol>
+<li>istore3: 同理,取出栈顶值,放入局部变量表第三个位置</li>
+</ol>
+<h2 id="栈和堆"><a href="#栈和堆" class="headerlink" title="栈和堆"></a>栈和堆</h2><p>堆(heap)是一块独立的内存空间.在创建对象的时候, 我们可以把真正的对象放到堆里,只在栈里记录这个对象的地址就可以了<br>现在有如下代码:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public class Main &#123;</div><div class="line">	public static void main(String args[]) &#123;</div><div class="line">		A a = new A(1);</div><div class="line">		A b = new A(2);</div><div class="line">		swap(a, b);</div><div class="line">		System.out.println(&quot;a&apos;s value is &quot; + a.value +&quot;, b&apos;s value is &quot; + b.value);</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	public static void swap(A a, A b) &#123;</div><div class="line">		int t = a.value;</div><div class="line">		a.value = b.value;</div><div class="line">		b.value = t;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">class A &#123;</div><div class="line">	public int value;</div><div class="line">	public A(int v) &#123;</div><div class="line">		this.value = v;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><img src="//os3e5ayd1.bkt.clouddn.com//file/2017/6/111c06f672c84a0f8b10b12ae7e82b31-image.png" alt="111c06f672c84a0f8b10b12ae7e82b31-image.png"><br>传入swap的都是副本,但是都是指向同一个地址,所以swap是可以正常修改对象值的,相反的,如果传入的参数是primitive type,那么在swap里修改的就是副本的值了,对原值没有任何影响</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;一个函数的调用过程&quot;&gt;&lt;a href=&quot;#一个函数的调用过程&quot; class=&quot;headerlink&quot; title=&quot;一个函数的调用过程&quot;&gt;&lt;/a&gt;一个函数的调用过程&lt;/h2&gt;&lt;p&gt;代码:&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;ta
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="JVM" scheme="http://yoursite.com/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2道很有意思的进制题</title>
+    <link href="http://yoursite.com/2017/06/17/2%E9%81%93%E5%BE%88%E6%9C%89%E6%84%8F%E6%80%9D%E7%9A%84%E8%BF%9B%E5%88%B6%E9%A2%98/"/>
+    <id>http://yoursite.com/2017/06/17/2道很有意思的进制题/</id>
+    <published>2017-06-17T11:49:35.000Z</published>
+    <updated>2017-07-02T15:50:22.426Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote>
+<p>1.一共有10只老鼠，1000只水杯，杯子里都盛着水，只有一个杯中是有毒的液体，这种毒 液老鼠喝下去以后，一个星期就会死掉。现在要求使用这10只老鼠，在一个星期之内找出盛着毒液的杯子。</p>
+</blockquote>
+<p>分析一下，这道题目其实是一道和二进制相关的题目。由于只能在一个星期内完成任务，那就说明不能进行重复的实验。这样的话，由于10只老鼠在一个星期以后的状态只能是死亡或者存活两种状态，根据乘法原理，我们知道，10个单位的两种状态，可能出现的所有可能是2^10 = 1024。足够编码1000个杯子了。也就是说，我们现在的任务是把1000个杯子 与10只老鼠的死和活的组合一一对应起来。如果把1到1000表示成二进制，那么答案就很明显了。</p>
+<p>将1到1000共一千个数，都转换成二进制编码。对于数字A，如果它的二进制的最低位 是1，那么就让1号老鼠喝一点这个杯子里的液体，如果是0就不喝。A的二进制的倒数第二低位如果是1，那么编号为2的老鼠就喝，否则不喝。依次类推。直到最高位如果是1，那么编号为10的老鼠就喝，否则该老鼠不喝。一个星期以后观察结果，如果编号为x的老鼠死掉 了，那么就从低向高数x位，在那个位置上标1，其他的位置标0。例如，如果只有2号和4号 老鼠死掉了，那么记录的结果就是“00 0000 1010”，这样一个二进制数。把它转成十进制是10，这就意味着10号杯子里装的是毒液，其他杯子则是水。</p>
+<blockquote>
+<p>2.有一架天平，它有20个砝码，这20个砝码的重量分别为 1,3,9,27···3^19。只要被称的物品的重量为位于区间 [1,(3^20−1)/2] 的整数，就可以使用这架天平进行称量。假设物品一直放在天平的左边，现在给出每个物品的重量，请打印出称量的方案。输出格式为两组数字，第一组代表天平左边要放的砝码，第二组代表天平右边要放的砝码。这两组数中间用空格隔开。每一组内部的数使用逗号隔开。如果天平的某一边不需要放砝码，那就打印 empty。<br>例如，输入是9，输出是 empty 9，代表左边不需要额外的砝码，而右边需要放一个重量为 9 的砝码。 输入是4，输出是empty 1,3。</p>
+</blockquote>
+<p>从最简单的情况入手进行分析。比如说1，那右边只要放1就可以。如果是2，我们可以用左边放1，右边放3这样的方案代替。3，右边只要放3。4，右边放1和4。到了5，由于不能再使用3-1去凑一个2了，所以唯一的方案是左边放1，3，右边放9。同样，6，也只好用9-3来凑。我们来分析一下这个规律。</p>
+<p>4 的三进制是 11，代表了1 <em> 3 ^ 1 + 1，5的三进制是12，代表了 1 </em> 3 ^ 1 + 2 <em> 3^0，6的三进制是20，代表了2 </em> 3^1 + 0 * 3^0。由于我们手里的砝码是3^0, 3^1, 3^2……，也就是说，如果目标数字的各个位置上都是1，那我们直接就能组合出来，而如果第n位上是2，就必须使用3^(n+1) - 3^n来凑这个数。也就是说，我们要在天平的左右两边各加上一个3^n，才能保持平衡。这样就把低一位上的2，消除成了高一位上的1。</p>
+<p>好了。有了这个算法，我们就可以写出程序了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">public int[][] solve(int x) &#123;</div><div class="line">    int pl = 0, pr = 0;</div><div class="line">    int poise = 1, r;</div><div class="line">    final int LEFT = 0, RIGHT = 1;</div><div class="line">    int[][] result = new int[2][20];</div><div class="line"></div><div class="line">    while (x &gt; 0) &#123;</div><div class="line">        r = x % 3;</div><div class="line">        if (r == 2) &#123;</div><div class="line">            result[LEFT][pl++] = poise;</div><div class="line">            x = (x + 1) / 3;</div><div class="line">        &#125;   </div><div class="line">        else if (r == 1) &#123;</div><div class="line">            result[RIGHT][pr++] = poise;</div><div class="line">            x = x / 3;</div><div class="line">        &#125;</div><div class="line">        else</div><div class="line">            x = x / 3;</div><div class="line"></div><div class="line">        poise *= 3;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;1.一共有10只老鼠，1000只水杯，杯子里都盛着水，只有一个杯中是有毒的液体，这种毒 液老鼠喝下去以后，一个星期就会死掉。现在要求使用这10只老鼠，在一个星期之内找出盛着毒液的杯子。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;分析一下，这道题目其
+    
+    </summary>
+    
+      <category term="算法" scheme="http://yoursite.com/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+      <category term="算法" scheme="http://yoursite.com/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="进制" scheme="http://yoursite.com/tags/%E8%BF%9B%E5%88%B6/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>WebMagic 实现的一个Java爬虫</title>
+    <link href="http://yoursite.com/2017/06/05/WebMagic-%E5%AE%9E%E7%8E%B0%E7%9A%84%E4%B8%80%E4%B8%AAJava%E7%88%AC%E8%99%AB/"/>
+    <id>http://yoursite.com/2017/06/05/WebMagic-实现的一个Java爬虫/</id>
+    <published>2017-06-05T12:50:13.000Z</published>
+    <updated>2017-07-02T15:49:13.054Z</updated>
+    
+    <content type="html"><![CDATA[<p>最近朋友需要开一个快递店,这时候就需要爬取澳洲药房的数据作为自己代发数据的基础,由此就有了这个小项目</p>
+<p>爬取对象为澳洲药房</p>
+<p>源码: <a href="https://github.com/lddahz789/ChemistSpider" target="_blank" rel="external">Java爬虫</a></p>
+<ul>
+<li>利用webmagic框架爬取澳洲药房产品数据并结合Mybatis,Spring将数据持久化到MySQL</li>
+<li>Using webmagic framework to collect all product information from chemist warehosue in Australia integrated with spring &amp; mybatis, which will persist data into MySQL.</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近朋友需要开一个快递店,这时候就需要爬取澳洲药房的数据作为自己代发数据的基础,由此就有了这个小项目&lt;/p&gt;
+&lt;p&gt;爬取对象为澳洲药房&lt;/p&gt;
+&lt;p&gt;源码: &lt;a href=&quot;https://github.com/lddahz789/ChemistSpider&quot; targe
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="webmgic" scheme="http://yoursite.com/tags/webmgic/"/>
+    
+      <category term="爬虫" scheme="http://yoursite.com/tags/%E7%88%AC%E8%99%AB/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java 反射</title>
+    <link href="http://yoursite.com/2017/06/02/Java-%E5%8F%8D%E5%B0%84/"/>
+    <id>http://yoursite.com/2017/06/02/Java-反射/</id>
+    <published>2017-06-01T17:21:28.000Z</published>
+    <updated>2017-07-02T15:47:34.754Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="1-Class类"><a href="#1-Class类" class="headerlink" title="1. Class类"></a>1. Class类</h1><p>任何一个类都是Class类的实例对象，这个实例对象有 三种表示方式:</p>
+<ul>
+<li><p>Class c1 = Student.class;//实际告诉我们任何一个类都有一个隐含的静态成员变量class（知道类名时用）</p>
+</li>
+<li><p>Class c2 = stu.getClass();//已知该类的对象通过getClass方法（知道对象时用）</p>
+</li>
+<li><p>Class c3 = Class.forName(“类的全名”);//会有一个ClassNotFoundException异常</p>
+</li>
+</ul>
+<p>既然是Class类的实例,那么为什么不用new呢?因为 java.lang.Class类的构造方法是私有的.</p>
+<p>通过类类型来建立该类的实例:<br>Student stu = (Student)c1.newInstance();//前提是必须要有无参的构造方法，因为该语句会去调用其无参构造方法。该语句会抛出异常。</p>
+<h1 id="2-动态加载类"><a href="#2-动态加载类" class="headerlink" title="2. 动态加载类"></a>2. 动态加载类</h1><h2 id="1、-编译时加载类是静态加载类"><a href="#1、-编译时加载类是静态加载类" class="headerlink" title="1、 编译时加载类是静态加载类"></a>1、 编译时加载类是静态加载类</h2><p>new 创建对象是静态加载类，在编译时刻就需要加载所有可用使用到的类，如果有一个用不了，那么整个文件都无法通过编译</p>
+<h2 id="2、-运行时加载类是动态加载类"><a href="#2、-运行时加载类是动态加载类" class="headerlink" title="2、 运行时加载类是动态加载类"></a>2、 运行时加载类是动态加载类</h2><p>Class c = Class.forName(“类的全名”)，不仅表示了类的类型，还表示了动态加载类，编译不会报错，在运行时才会加载，使用接口标准能更方便动态加载类的实现。功能性的类尽量使用动态加载，而不用静态加载。</p>
+<p>许多程序的在线升级，并不需要重新编译文件了，只是动态的加载新的东西</p>
+<h1 id="3-获取方法信息"><a href="#3-获取方法信息" class="headerlink" title="3. 获取方法信息"></a>3. 获取方法信息</h1><h2 id="1、基本的数据类型，void关键字都存在类类型"><a href="#1、基本的数据类型，void关键字都存在类类型" class="headerlink" title="1、基本的数据类型，void关键字都存在类类型"></a>1、基本的数据类型，void关键字都存在类类型</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">1 Class c1 =int.class;//int的类类型</div><div class="line">2 Class c2 =String.class;//String类的类类型，可以理解为编译生成的那个String.class字节码文件，</div><div class="line">3 //当然，这并不是官方的说法</div><div class="line">4 Class c3 =double.class;</div><div class="line">5 Class c4 =Double.class;</div><div class="line">6 Class c5 =void.class;</div></pre></td></tr></table></figure>
+<h2 id="2、Class类的基本API操作"><a href="#2、Class类的基本API操作" class="headerlink" title="2、Class类的基本API操作"></a>2、Class类的基本API操作</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">1 /**</div><div class="line"> 2     * 打印类的信息，包括类的成员函数，成员变量</div><div class="line"> 3 * @param obj 该对象所属类的信息信息</div><div class="line"> 4 */</div><div class="line"> 5 publicstaticvoid printClassMessage(Object obj)&#123;</div><div class="line"> 6 //要获取类的信息，首先要获取类的类类型</div><div class="line"> 7 Class c = obj.getClass();//传递的是哪个子类的对象，c就是该子类的类类型</div><div class="line"> 8 //获取类的名称</div><div class="line"> 9 System.out.println(&quot;类的名称是：&quot;+c.getName());</div><div class="line">10 </div><div class="line">11 /*</div><div class="line">12     * Method类，方法的对象</div><div class="line">13 * 一个成员方法就是一个Method对象</div><div class="line">14 * getMethods()方法获取的是所有的public的函数，包括父类继承而来的</div><div class="line">15 * getDeclaredMethods()获取的是多有该类自己声明的方法，不问访问权限</div><div class="line">16 */</div><div class="line">17 Method[] ms = c.getMethods();//c.getDeclaredMethods();</div><div class="line">18 for(int i =0; i &lt; ms.length; i++)&#123;</div><div class="line">19 //得到方法的返回值类型的类类型</div><div class="line">20 Class retrunType = ms[i].getReturnType();</div><div class="line">21 System.out.print(retrunType.getName()+&quot; &quot;);</div><div class="line">22 //得到方法的名称</div><div class="line">23 System.out.print(ms[i].getName()+&quot;(&quot;);</div><div class="line">24 //获取的参数类型---&gt;得到的是参数列表的类型的类类型</div><div class="line">25 Class[] paraTypes = ms[i].getParameterTypes();</div><div class="line">26 for(Class class1 : paraTypes)&#123;</div><div class="line">27 System.out.print(class1.getName()+&quot;,&quot;);</div><div class="line">28 &#125;</div><div class="line">29 System.out.println(&quot;)&quot;);</div><div class="line">30 &#125;</div><div class="line">31 &#125;</div></pre></td></tr></table></figure>
+<p>在执行任何操作之前,想要获得类的各种信息,要先获得类类型</p>
+<h1 id="4-获取成员变量构造函数"><a href="#4-获取成员变量构造函数" class="headerlink" title="4. 获取成员变量构造函数"></a>4. 获取成员变量构造函数</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line"> 1 /**</div><div class="line"> 2     * 成员变量也是对象，是java.lang.reflect.Field这个类的的对象</div><div class="line"> 3 * Field类封装了关于成员变量的操作</div><div class="line"> 4 * getFields()方法获取的是所有public的成员变量的信息</div><div class="line"> 5 * getDeclareFields()方法获取的是该类自己声明的成员变量的信息</div><div class="line"> 6 */</div><div class="line"> 7 Field[] fs = c.getDeclaredFields();</div><div class="line"> 8 for(Field field : fs)&#123;</div><div class="line"> 9 //得到成员变量的类型的类类型</div><div class="line">10 Class fieldType = field.getType();</div><div class="line">11 String typeName = fieldType.getName();</div><div class="line">12 //得到成员变量的名称</div><div class="line">13 String fieldName = field.getName();</div><div class="line">14 System.out.print(typeName+&quot; &quot;+fieldName);</div><div class="line">15 &#125;</div><div class="line">16 </div><div class="line">17 </div><div class="line">18 /**</div><div class="line">19     * 构造函数也是对象</div><div class="line">20 * java.lang.Constructor中封装了构造函数的信息</div><div class="line">21 * getConstructor()方法获取所有的public的构造函数</div><div class="line">22 * getDeclaredConstructors得到所有的构造函数</div><div class="line">23 */</div><div class="line">24 Constructor[] cs = c.getDeclaredConstructors();</div><div class="line">25 for(Constructor constructor : cs)&#123;</div><div class="line">26 System.out.print(constructor.getName()+&quot;(&quot;);</div><div class="line">27 //获取构造函数的参数列表---》得到的是参数雷彪的类类型</div><div class="line">28 Class[] paramTypes = constructor.getParameterTypes();</div><div class="line">29 for(Class class1 : paramTypes)&#123;</div><div class="line">30 System.out.print(class1.getName()+&quot;,&quot;);</div><div class="line">31 &#125;</div><div class="line">32 System.out.println(&quot;)&quot;);</div><div class="line">33 &#125;</div></pre></td></tr></table></figure>
+<h1 id="5-基本操作"><a href="#5-基本操作" class="headerlink" title="5. 基本操作"></a>5. 基本操作</h1><ul>
+<li>获得方法<br>方法的名称和方法的参数列表才能唯一决定某个方法</li>
+</ul>
+<p>Method m = c.getDeclaredMethod(“方法名”，可变参数列表（参数类型.class）)</p>
+<ul>
+<li>方法的反射操作<br>m.invoke(对象,参数列表);<br>方法如果没有返回值，返回null，如果有返回值返回Object类型，然后再强制类型转换为原函数的返回值类型</li>
+</ul>
+<h1 id="6-通过反射来了解集合泛型本质"><a href="#6-通过反射来了解集合泛型本质" class="headerlink" title="6. 通过反射来了解集合泛型本质"></a>6. 通过反射来了解集合泛型本质</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">1 ArrayList list1 =new ArrayList();</div><div class="line">2 ArrayList&lt;String&gt; list2 =new ArrayList&lt;String&gt;();</div><div class="line">3 </div><div class="line">4 Class c1 = list1.getClass();</div><div class="line">5 Class c2 = list2.getClass();</div><div class="line">6 </div><div class="line">7 System.out.println(c1==c2);//结果为true</div></pre></td></tr></table></figure>
+<p>因为反射的操作都是编译之后的操作，也就是运行时的操作，c1==c2返回true，说明编译之后集合的泛型是去泛型化的。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;1-Class类&quot;&gt;&lt;a href=&quot;#1-Class类&quot; class=&quot;headerlink&quot; title=&quot;1. Class类&quot;&gt;&lt;/a&gt;1. Class类&lt;/h1&gt;&lt;p&gt;任何一个类都是Class类的实例对象，这个实例对象有 三种表示方式:&lt;/p&gt;
+&lt;ul&gt;
+
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="反射" scheme="http://yoursite.com/tags/%E5%8F%8D%E5%B0%84/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>静态代码块执行顺序</title>
+    <link href="http://yoursite.com/2017/05/17/%E9%9D%99%E6%80%81%E4%BB%A3%E7%A0%81%E5%9D%97%E6%89%A7%E8%A1%8C%E9%A1%BA%E5%BA%8F/"/>
+    <id>http://yoursite.com/2017/05/17/静态代码块执行顺序/</id>
+    <published>2017-05-17T10:22:51.000Z</published>
+    <updated>2017-07-02T15:46:01.059Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="执行顺序：静态代码块-gt-构造代码块-gt-构造方法"><a href="#执行顺序：静态代码块-gt-构造代码块-gt-构造方法" class="headerlink" title="执行顺序：静态代码块&gt;构造代码块&gt;构造方法"></a>执行顺序：静态代码块&gt;构造代码块&gt;构造方法</h1><blockquote>
+<p>理由：静态代码块（static{}）在类加载的时候执行一次。<br>构造代码块（{}内的部分）在每一次创建对象时执行，始终在构造方法前执行。<br>构造方法在新建对象时调用（ 就是new的时候 ）。<br>注意： a.静态代码块在类加载的时候就执行，所以它的优先级高于入口main()方法。 b.当三种形式不止一次出现，同优先级是按照先后顺序执行。</p>
+</blockquote>
+<h3 id="带继承的例子"><a href="#带继承的例子" class="headerlink" title="带继承的例子"></a>带继承的例子</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">public class HelloB extends HelloA &#123;</div><div class="line">     </div><div class="line">     public HelloB()&#123;</div><div class="line">         System.out.println(&quot;B的构造方法&quot;);</div><div class="line">     &#125;</div><div class="line">     &#123;</div><div class="line">         System.out.println(&quot;B的构造代码块&quot;);</div><div class="line">     &#125;</div><div class="line">     static&#123;</div><div class="line">         System.out.println(&quot;B的静态代码块&quot;);</div><div class="line">     &#125;</div><div class="line">     //public static HelloB hB = new HelloB();</div><div class="line">     public static void main(String[] args)&#123;</div><div class="line">         new HelloB();//调用B的构造方法</div><div class="line">     &#125;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">class HelloA&#123;</div><div class="line">     public HelloA()&#123;</div><div class="line">         System.out.println(&quot;A的构造方法&quot;);</div><div class="line">     &#125;</div><div class="line">     &#123;</div><div class="line">         System.out.println(&quot;A的构造代码块&quot;);</div><div class="line">     &#125;</div><div class="line">     static&#123;</div><div class="line">         System.out.println(&quot;A的静态代码块&quot;);</div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>输出结果为：<br>A的静态代码块<br>B的静态代码块<br>A的构造代码块<br>A的构造方法<br>B的构造代码块<br>B的构造方法</p>
+</blockquote>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>a.父类始终先调用（继承先调用父类），并且这三者之间的相对顺序始终保持不变</p>
+<p>b.因为静态代码块在类加载时执行，所以先输出的是父类和子类的静态代码块</p>
+<p>c.调用B的构造方法创建对象时，构造块和构造方法会一起按顺序执行，还是父类的先调用</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;执行顺序：静态代码块-gt-构造代码块-gt-构造方法&quot;&gt;&lt;a href=&quot;#执行顺序：静态代码块-gt-构造代码块-gt-构造方法&quot; class=&quot;headerlink&quot; title=&quot;执行顺序：静态代码块&amp;gt;构造代码块&amp;gt;构造方法&quot;&gt;&lt;/a&gt;执行顺序：
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="杂谈" scheme="http://yoursite.com/tags/%E6%9D%82%E8%B0%88/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HashTable和HashMap区别</title>
+    <link href="http://yoursite.com/2017/05/15/HashTable%E5%92%8CHashMap%E5%8C%BA%E5%88%AB/"/>
+    <id>http://yoursite.com/2017/05/15/HashTable和HashMap区别/</id>
+    <published>2017-05-15T05:21:23.000Z</published>
+    <updated>2017-07-02T15:44:41.307Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="1-继承不同"><a href="#1-继承不同" class="headerlink" title="1.继承不同"></a>1.继承不同</h2><p>public class Hashtable extends Dictionary implements Map<br>public class HashMap extends AbstractMap implements Map</p>
+<h2 id="2-Synchronized-关键字"><a href="#2-Synchronized-关键字" class="headerlink" title="2.Synchronized 关键字"></a>2.Synchronized 关键字</h2><p>Hashtable 中的方法是同步的，而HashMap中的方法在缺省情况下是非同步的。在多线程并发的环境下，可以直接使用Hashtable，但是要使用HashMap的话就要自己增加同步处理了。</p>
+<h2 id="3-Hashtable中，key和value都不允许出现null值"><a href="#3-Hashtable中，key和value都不允许出现null值" class="headerlink" title="3.Hashtable中，key和value都不允许出现null值"></a>3.Hashtable中，key和value都不允许出现null值</h2><p>在HashMap中，null可以作为键，这样的键只有一个；可以有一个或多个键所对应的值为null。当get()方法返回null值时，即可以表示 HashMap中没有该键，也可以表示该键所对应的值为null。因此，在HashMap中不能由get()方法来判断HashMap中是否存在某个键， 而应该用containsKey()方法来判断。</p>
+<h2 id="4-两个遍历方式的内部实现上不同"><a href="#4-两个遍历方式的内部实现上不同" class="headerlink" title="4.两个遍历方式的内部实现上不同"></a>4.两个遍历方式的内部实现上不同</h2><p>Hashtable、HashMap都使用了 Iterator。而由于历史原因，Hashtable还使用了Enumeration的方式 。</p>
+<h2 id="5-哈希值的使用不同"><a href="#5-哈希值的使用不同" class="headerlink" title="5.哈希值的使用不同"></a>5.哈希值的使用不同</h2><p>HashTable直接使用对象的hashCode。而HashMap重新计算hash值。</p>
+<h2 id="6-扩容方式不同"><a href="#6-扩容方式不同" class="headerlink" title="6.扩容方式不同"></a>6.扩容方式不同</h2><p>Hashtable和HashMap它们两个内部实现方式的数组的初始大小和扩容的方式. HashTable中hash数组默认大小是11，增加的方式是 old*2+1。HashMap中hash数组的默认大小是16，而且一定是2的指数。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;1-继承不同&quot;&gt;&lt;a href=&quot;#1-继承不同&quot; class=&quot;headerlink&quot; title=&quot;1.继承不同&quot;&gt;&lt;/a&gt;1.继承不同&lt;/h2&gt;&lt;p&gt;public class Hashtable extends Dictionary implements M
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="HashMap" scheme="http://yoursite.com/tags/HashMap/"/>
+    
+      <category term="HashTable" scheme="http://yoursite.com/tags/HashTable/"/>
+    
+      <category term="JAVA" scheme="http://yoursite.com/tags/JAVA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>模仿天猫全站,纯J2EE实现</title>
+    <link href="http://yoursite.com/2017/05/02/%E6%A8%A1%E4%BB%BF%E5%A4%A9%E7%8C%AB%E5%85%A8%E7%AB%99-%E7%BA%AFJ2EE%E5%AE%9E%E7%8E%B0/"/>
+    <id>http://yoursite.com/2017/05/02/模仿天猫全站-纯J2EE实现/</id>
+    <published>2017-05-02T15:14:40.000Z</published>
+    <updated>2017-07-02T15:32:28.247Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p><a href="http://106.14.173.104/tianmao" target="_blank" rel="external">在线演示</a></p>
+<ol>
+<li>使用整套J2EE技术实现，关键逻辑Junit单元测试</li>
+<li>Servlet + 反射 + Filter 来精简Servlet数量</li>
+<li>采用webmagic框架爬取相关商品信息</li>
+<li>采用Filter控制用户登录状态 &amp; 转换字符编码</li>
+<li>MVC设计模式贯穿前台以及后台</li>
+<li>整个后台使用统一的分页机制</li>
+<li>模块化Jsp设计，将复杂页面抽象成可重用模块</li>
+<li>MySQL作为数据库，MD5加密敏感数据</li>
+</ol>
+<h2 id="截图"><a href="#截图" class="headerlink" title="截图"></a>截图</h2><p><img src="//os3e5ayd1.bkt.clouddn.com//file/2017/7/1afa755050c14bb98885a1b7b4f205cf-image.png" alt="1afa755050c14bb98885a1b7b4f205cf-image.png"><br><img src="//os3e5ayd1.bkt.clouddn.com//file/2017/7/d870ec7102ed4c02a7035929453a5a69-image.png" alt="d870ec7102ed4c02a7035929453a5a69-image.png"></p>
+<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a>Git</h2><p><a href="https://github.com/lddahz789" target="_blank" rel="external">https://github.com/lddahz789</a><br>喜欢请star~</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;http://106.14.173.104/tianmao&quot; target=&quot;_blank&quot; rel=&quot;external&quot;
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="反射" scheme="http://yoursite.com/tags/%E5%8F%8D%E5%B0%84/"/>
+    
+      <category term="J2EE" scheme="http://yoursite.com/tags/J2EE/"/>
+    
+      <category term="JSP" scheme="http://yoursite.com/tags/JSP/"/>
+    
+      <category term="Servlet" scheme="http://yoursite.com/tags/Servlet/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Java学习笔记</title>
+    <link href="http://yoursite.com/2016/08/22/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    <id>http://yoursite.com/2016/08/22/Java学习笔记/</id>
+    <published>2016-08-22T14:53:53.000Z</published>
+    <updated>2017-07-02T15:12:53.304Z</updated>
+    
+    <content type="html"><![CDATA[<ol>
+<li>异常捕获时,把需要关闭流的语句写在try()的括号里,之后会自动关闭流,不用再写多余的代码.</li>
+<li>反射:getField 只能获取public的，包括从父类继承来的字段。getDeclaredField 可以获取本类所有的字段，包括private的，但是不能获取继承来的字段. (注： 这里只能获取到private的字段，但并不能访问该private字段的值)</li>
+<li>JSP SERVLET中 getParameter 取的是表单发过来的值,getAttribute取的是自己setAttribute的值</li>
+<li>JSP forward是服务器跳转, redirect是客户端跳转</li>
+<li>MyBatis中#与$的区别: #{para}会产生PreparedStatement的占位符 ${something}则直接将花括号里的something插入插入字符串</li>
+<li>接口中方法默认为 public abstract, 变量默认为 public static final</li>
+<li></li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;ol&gt;
+&lt;li&gt;异常捕获时,把需要关闭流的语句写在try()的括号里,之后会自动关闭流,不用再写多余的代码.&lt;/li&gt;
+&lt;li&gt;反射:getField 只能获取public的，包括从父类继承来的字段。getDeclaredField 可以获取本类所有的字段，包括private的
+    
+    </summary>
+    
+      <category term="Java" scheme="http://yoursite.com/categories/Java/"/>
+    
+    
+      <category term="杂谈" scheme="http://yoursite.com/tags/%E6%9D%82%E8%B0%88/"/>
+    
+  </entry>
+  
+</feed>
