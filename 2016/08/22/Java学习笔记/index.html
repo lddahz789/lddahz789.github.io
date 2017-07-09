@@ -102,7 +102,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/08/22/Java学习笔记/index.html">
 <meta property="og:site_name" content="Lyn的个人博客">
 <meta property="og:description" content="异常捕获时,把需要关闭流的语句写在try()的括号里,之后会自动关闭流,不用再写多余的代码. 反射:getField 只能获取public的，包括从父类继承来的字段。getDeclaredField 可以获取本类所有的字段，包括private的，但是不能获取继承来的字段. (注： 这里只能获取到private的字段，但并不能访问该private字段的值) JSP SERVLET中 getPara">
-<meta property="og:updated_time" content="2017-07-09T12:27:09.890Z">
+<meta property="og:updated_time" content="2017-07-09T12:31:26.928Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java学习笔记">
 <meta name="twitter:description" content="异常捕获时,把需要关闭流的语句写在try()的括号里,之后会自动关闭流,不用再写多余的代码. 反射:getField 只能获取public的，包括从父类继承来的字段。getDeclaredField 可以获取本类所有的字段，包括private的，但是不能获取继承来的字段. (注： 这里只能获取到private的字段，但并不能访问该private字段的值) JSP SERVLET中 getPara">
@@ -408,7 +408,7 @@
 <li><p>Java8 中接口可以有默认方法 用关键字 default, 实现了该接口的类可以选择直接使用或者重写该方法</p>
 </li>
 <li>(数据库中)悲观锁：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。<br>乐观锁：假设不会发生并发冲突，只在提交操作时检查是否违反数据完整性。 乐观锁不能解决脏读的问题。<br>JAVA 独占锁是一种悲观锁，synchronized就是一种独占锁，它假设最坏的情况，并且只有在确保其它线程不会造成干扰的情况下执行，会导致其它所有需要锁的线程挂起，等待持有锁的线程释放锁.<br>乐观锁的概念，他的核心思路就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止.</li>
-<li>volatile关键字的作用: 保证此变量对所有线程的可见性，指一条线程修改了这个变量的值，新值对于其他线程来说是可见的，但并不是多线程安全的,另外一个作用是禁止指令的重排序优化</li>
+<li>volatile关键字的作用: 保证此变量对所有线程的可见性，指一条线程修改了这个变量的值，新值对于其他线程来说是可见的，但并不是多线程安全的,另外一个作用是禁止指令的重排序优化4</li>
 </ol>
 <hr>
 <ol>
