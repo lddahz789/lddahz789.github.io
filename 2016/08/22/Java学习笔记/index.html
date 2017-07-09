@@ -102,7 +102,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/08/22/Java学习笔记/index.html">
 <meta property="og:site_name" content="Lyn的个人博客">
 <meta property="og:description" content="异常捕获时,把需要关闭流的语句写在try()的括号里,之后会自动关闭流,不用再写多余的代码. 反射:getField 只能获取public的，包括从父类继承来的字段。getDeclaredField 可以获取本类所有的字段，包括private的，但是不能获取继承来的字段. (注： 这里只能获取到private的字段，但并不能访问该private字段的值) JSP SERVLET中 getPara">
-<meta property="og:updated_time" content="2017-07-02T17:02:18.961Z">
+<meta property="og:updated_time" content="2017-07-09T12:27:09.890Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java学习笔记">
 <meta name="twitter:description" content="异常捕获时,把需要关闭流的语句写在try()的括号里,之后会自动关闭流,不用再写多余的代码. 反射:getField 只能获取public的，包括从父类继承来的字段。getDeclaredField 可以获取本类所有的字段，包括private的，但是不能获取继承来的字段. (注： 这里只能获取到private的字段，但并不能访问该private字段的值) JSP SERVLET中 getPara">
@@ -398,7 +398,21 @@
 <li>JSP forward是服务器跳转, redirect是客户端跳转<a id="more"></a></li>
 <li>MyBatis中#与$的区别: #{para}会产生PreparedStatement的占位符 ${something}则直接将花括号里的something插入插入字符串</li>
 <li>接口中方法默认为 public abstract, 变量默认为 public static final</li>
-<li></li>
+<li>深度为k的满二叉树有(2^k)-1个节点,在二叉树的第i个节点上最多有2^(i-1)个节点, 具有 n 个结点的完全二叉树的深度为log(2)(n) +1</li>
+<li>时间复杂度为O(n^2)的插入排序有时非常好用,比如在处理一个接近有序的数组时</li>
+<li><p>~取反运算符运算符. 例如有十进制数10,则~10= -11 (便捷公式~n=-n-1)</p>
+<p><strong>原理</strong><br>计算机本身储存的就是补码：<br>那么10的补码就是10的原码：0000 0000 0000 1010——这是补码，因为现在是计算机在计算<br>~10的补码就是：1111 1111 1111 0101<br>~10的反码就是：1111 1111 1111 0100——补码减1<br>~10的原码就是：1000 0000 0000 1011——反码取反：这个才是正常二进制数，换算为整数为-11</p>
+</li>
+<li><p>两个数值进行二元操作时，会有如下的转换操作：<br>如果两个操作数其中有一个是double类型，另一个操作就会转换为double类型。<br>否则，如果其中一个操作数是float类型，另一个将会转换为float类型。<br>否则，如果其中一个操作数是long类型，另一个会转换为long类型。<br>否则，两个操作数都转换为int类型。</p>
+</li>
+<li><p>Java8 中接口可以有默认方法 用关键字 default, 实现了该接口的类可以选择直接使用或者重写该方法</p>
+</li>
+<li>(数据库中)悲观锁：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。<br>乐观锁：假设不会发生并发冲突，只在提交操作时检查是否违反数据完整性。 乐观锁不能解决脏读的问题。<br>JAVA 独占锁是一种悲观锁，synchronized就是一种独占锁，它假设最坏的情况，并且只有在确保其它线程不会造成干扰的情况下执行，会导致其它所有需要锁的线程挂起，等待持有锁的线程释放锁.<br>乐观锁的概念，他的核心思路就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止.</li>
+<li>volatile关键字的作用: 保证此变量对所有线程的可见性，指一条线程修改了这个变量的值，新值对于其他线程来说是可见的，但并不是多线程安全的,另外一个作用是禁止指令的重排序优化</li>
+</ol>
+<hr>
+<ol>
+<li>线程池的作用：在程序启动的时候就创建若干线程来响应处理，它们被称为线程池，里面的线程叫工作线程<br>第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。<br>第二：提高响应速度。当任务到达时，任务可以不需要等到线程创建就能立即执行。<br>第三：提高线程的可管理性。</li>
 </ol>
 
       
@@ -691,7 +705,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共5.7k字</span>
+  <span class="post-count">博客全站共6.4k字</span>
 </div>
         
 

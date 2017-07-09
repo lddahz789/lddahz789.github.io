@@ -705,8 +705,7 @@
 
       
         
-          
-            <h1 id="FlashSale-高并发秒杀系统"><a href="#FlashSale-高并发秒杀系统" class="headerlink" title="FlashSale - 高并发秒杀系统"></a>FlashSale - 高并发秒杀系统</h1><h2 id="GitHub源码地址"><a href="#GitHub源码地址" class="headerlink" title="GitHub源码地址"></a>GitHub源码地址</h2><p><a href="https://github.com/lddahz789" target="_blank" rel="external">https://github.com/lddahz789</a></p>
+          <h1 id="FlashSale-高并发秒杀系统"><a href="#FlashSale-高并发秒杀系统" class="headerlink" title="FlashSale - 高并发秒杀系统"></a>FlashSale - 高并发秒杀系统</h1><h2 id="GitHub源码地址"><a href="#GitHub源码地址" class="headerlink" title="GitHub源码地址"></a>GitHub源码地址</h2><p><a href="https://github.com/lddahz789" target="_blank" rel="external">https://github.com/lddahz789</a></p>
 <h2 id="项目使用"><a href="#项目使用" class="headerlink" title="项目使用"></a>项目使用</h2><h3 id="1-下载"><a href="#1-下载" class="headerlink" title="1. 下载"></a>1. 下载</h3><p><code>Download Zip</code>或者 <code>git clone</code></p>
 <blockquote>
 <p>git clone <a href="https://github.com/lddahz789/FlashSale.git" target="_blank" rel="external">https://github.com/lddahz789/FlashSale.git</a></p>
@@ -715,42 +714,14 @@
 <p>为你的redis服务器地址或者localhost</p>
 <h3 id="3-部署"><a href="#3-部署" class="headerlink" title="3. 部署"></a>3. 部署</h3><p>部署项目到tomcat之类的web容器</p>
 <blockquote>
-<p>注: 如图在web目录下中的js文件中请将此更改为你的项目地址(server.xml中配置的) 或者更改为获取到的contextPath<br><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/g06dc1BhmD.png?imageslim" alt="mark"></p>
-</blockquote>
-<h3 id="4-Enjoy"><a href="#4-Enjoy" class="headerlink" title="4. Enjoy"></a>4. Enjoy</h3><p>访问<a href="http://你的域名/你的项目名" target="_blank" rel="external">http://你的域名/你的项目名</a></p>
-<h2 id="项目在线演示"><a href="#项目在线演示" class="headerlink" title="项目在线演示:"></a>项目在线演示:</h2><p><a href="http://example.bestzhuo.top/miaosha" target="_blank" rel="external">http://example.bestzhuo.top/miaosha</a> (近期备案中,可能会影响访问)<br>or<br><a href="http://106.14.173.104/miaosha" target="_blank" rel="external">http://106.14.173.104/miaosha</a></p>
-<h2 id="项目截图"><a href="#项目截图" class="headerlink" title="项目截图"></a>项目截图</h2><p><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/HL644h0bI0.png?imageslim" alt="mark"><br><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/1mm4iAbfC7.png?imageslim" alt="mark"><br><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/2e3gIIjD4a.png?imageslim" alt="mark"><br><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/9Lj0K1mLA1.png?imageslim" alt="mark"><br><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/mH8hklmj8i.png?imageslim" alt="mark"></p>
-<h2 id="项目设计思路"><a href="#项目设计思路" class="headerlink" title="项目设计思路"></a>项目设计思路</h2><h3 id="1-数据库设计"><a href="#1-数据库设计" class="headerlink" title="1. 数据库设计"></a>1. 数据库设计</h3><ul>
-<li>product: 存放商品信息,包含商品ID,库存,秒杀相关的时间</li>
-<li>order: 存放订单信息,由于没有做登录模块,所以从cookie中读取用户手机,手机+商品ID为订单的主键<h3 id="2-DAO层设计"><a href="#2-DAO层设计" class="headerlink" title="2. DAO层设计"></a>2. DAO层设计</h3></li>
-<li>整合MyBatis与Spring实现DAO层,这里用的是接口+MAPPER.XML的方式</li>
-<li>编写DAO相关的JUnit测试<h3 id="3-SERVICE层设计"><a href="#3-SERVICE层设计" class="headerlink" title="3. SERVICE层设计"></a>3. SERVICE层设计</h3></li>
-<li>站在使用者的角度设计SERVICE层的接口</li>
-<li>实现接口,完成业务逻辑,包括加密等操作都在这执行</li>
-<li>service: 存放服务，即为一系列逻辑</li>
-<li>exception:    存放service接口所需要的异常，如重复秒杀，秒杀与关闭等</li>
-<li>dto: 数据传输层，与entity类似，存放一些表示数据的类型，web与service间的数据传递</li>
-<li>enums: 封装枚举类，表述常量字段-状态值（“秒杀成功”，“秒杀结束”等等）</li>
-<li><p>web接口设计,基于RESTful</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">GET	/flashsale/list	（秒杀列表）</div><div class="line">GET	/flashsale/&#123;id&#125;/detail	（详情页）</div><div class="line">GET	/flashsale/time/now	（系统时间）</div><div class="line">POST	/flashsale/&#123;id&#125;/exposer	（暴露秒杀）</div><div class="line">POST /flashsale/&#123;id&#125;/&#123;md5&#125;/execution	（执行秒杀</div></pre></td></tr></table></figure>
-</li>
-<li><p>完成JUnit单元测试</p>
-<h3 id="4-Web层设计"><a href="#4-Web层设计" class="headerlink" title="4. Web层设计"></a>4. Web层设计</h3><h4 id="页面逻辑"><a href="#页面逻辑" class="headerlink" title="页面逻辑"></a>页面逻辑</h4><p><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/D5828e6101.png?imageslim" alt="mark"></p>
-</li>
-<li>jsp页面模块化设计</li>
-<li>js模块化设计</li>
-<li>Ajax的应用<h3 id="5-并发优化"><a href="#5-并发优化" class="headerlink" title="5. 并发优化"></a>5. 并发优化</h3><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/G7cgJdd2if.png?imageslim" alt="mark"><br><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/BccED716lm.png?imageslim" alt="mark"><br><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/5a6j99JDbC.png?imageslim" alt="mark"></li>
-<li>对于静态资源,使用CDN服务</li>
-<li>对于秒杀地址暴露的接口这种情况,我们可以用redis缓存.</li>
-<li>对于获取时间操作,不必优化,本身执行就很快,可以达到10WQPS.</li>
-<li>为了减少MYSQL的行级锁持有时间,将更新库存操作与增加订单操作顺序对调.</li>
-<li>进一步优化: 为了减少网络延迟跟GC带来的影响,我们使用数据库存储过程来取代JAVA中的事务<h3 id="进一步优化-TODO"><a href="#进一步优化-TODO" class="headerlink" title="进一步优化 //TODO"></a>进一步优化 //TODO</h3></li>
-<li>使用分布式数据库 分表</li>
-<li>Nginx与WEB容器配合(反向代理) 集群化部署</li>
-<li>Redis 集群化部署<br><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/J9K518hCeF.png?imageslim" alt="mark"></li>
-</ul>
-
-          
+<p>注: 如图在web目录下中的js文件中请将此更改为你的项目地址(server.xml中配置的) 或者更改为获取到的contextPath<br><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/g06dc1BhmD.png?imageslim" alt="mark"><br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/06/18/FlashSale-高并发秒杀系统/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -2067,7 +2038,7 @@
 
 <div class="theme-info">
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共5.7k字</span>
+  <span class="post-count">博客全站共6.4k字</span>
 </div>
         
 

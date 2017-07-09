@@ -153,7 +153,7 @@
     <link href="http://yoursite.com/2017/06/18/FlashSale-%E9%AB%98%E5%B9%B6%E5%8F%91%E7%A7%92%E6%9D%80%E7%B3%BB%E7%BB%9F/"/>
     <id>http://yoursite.com/2017/06/18/FlashSale-高并发秒杀系统/</id>
     <published>2017-06-18T05:07:08.000Z</published>
-    <updated>2017-07-05T05:10:19.996Z</updated>
+    <updated>2017-07-06T12:01:03.760Z</updated>
     
     <content type="html"><![CDATA[<h1 id="FlashSale-高并发秒杀系统"><a href="#FlashSale-高并发秒杀系统" class="headerlink" title="FlashSale - 高并发秒杀系统"></a>FlashSale - 高并发秒杀系统</h1><h2 id="GitHub源码地址"><a href="#GitHub源码地址" class="headerlink" title="GitHub源码地址"></a>GitHub源码地址</h2><p><a href="https://github.com/lddahz789" target="_blank" rel="external">https://github.com/lddahz789</a></p>
 <h2 id="项目使用"><a href="#项目使用" class="headerlink" title="项目使用"></a>项目使用</h2><h3 id="1-下载"><a href="#1-下载" class="headerlink" title="1. 下载"></a>1. 下载</h3><p><code>Download Zip</code>或者 <code>git clone</code></p>
@@ -164,7 +164,7 @@
 <p>为你的redis服务器地址或者localhost</p>
 <h3 id="3-部署"><a href="#3-部署" class="headerlink" title="3. 部署"></a>3. 部署</h3><p>部署项目到tomcat之类的web容器</p>
 <blockquote>
-<p>注: 如图在web目录下中的js文件中请将此更改为你的项目地址(server.xml中配置的) 或者更改为获取到的contextPath<br><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/g06dc1BhmD.png?imageslim" alt="mark"></p>
+<p>注: 如图在web目录下中的js文件中请将此更改为你的项目地址(server.xml中配置的) 或者更改为获取到的contextPath<br><img src="http://os3e5ayd1.bkt.clouddn.com/blog/170705/g06dc1BhmD.png?imageslim" alt="mark"><br><a id="more"></a></p>
 </blockquote>
 <h3 id="4-Enjoy"><a href="#4-Enjoy" class="headerlink" title="4. Enjoy"></a>4. Enjoy</h3><p>访问<a href="http://你的域名/你的项目名" target="_blank" rel="external">http://你的域名/你的项目名</a></p>
 <h2 id="项目在线演示"><a href="#项目在线演示" class="headerlink" title="项目在线演示:"></a>项目在线演示:</h2><p><a href="http://example.bestzhuo.top/miaosha" target="_blank" rel="external">http://example.bestzhuo.top/miaosha</a> (近期备案中,可能会影响访问)<br>or<br><a href="http://106.14.173.104/miaosha" target="_blank" rel="external">http://106.14.173.104/miaosha</a></p>
@@ -202,7 +202,16 @@
     
     <summary type="html">
     
-      &lt;h1 id=&quot;FlashSale-高并发秒杀系统&quot;&gt;&lt;a href=&quot;#FlashSale-高并发秒杀系统&quot; class=&quot;headerlink&quot; title=&quot;FlashSale - 高并发秒杀系统&quot;&gt;&lt;/a&gt;FlashSale - 高并发秒杀系统&lt;/h1&gt;&lt;h2 id=&quot;G
+      &lt;h1 id=&quot;FlashSale-高并发秒杀系统&quot;&gt;&lt;a href=&quot;#FlashSale-高并发秒杀系统&quot; class=&quot;headerlink&quot; title=&quot;FlashSale - 高并发秒杀系统&quot;&gt;&lt;/a&gt;FlashSale - 高并发秒杀系统&lt;/h1&gt;&lt;h2 id=&quot;GitHub源码地址&quot;&gt;&lt;a href=&quot;#GitHub源码地址&quot; class=&quot;headerlink&quot; title=&quot;GitHub源码地址&quot;&gt;&lt;/a&gt;GitHub源码地址&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/lddahz789&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/lddahz789&lt;/a&gt;&lt;/p&gt;
+&lt;h2 id=&quot;项目使用&quot;&gt;&lt;a href=&quot;#项目使用&quot; class=&quot;headerlink&quot; title=&quot;项目使用&quot;&gt;&lt;/a&gt;项目使用&lt;/h2&gt;&lt;h3 id=&quot;1-下载&quot;&gt;&lt;a href=&quot;#1-下载&quot; class=&quot;headerlink&quot; title=&quot;1. 下载&quot;&gt;&lt;/a&gt;1. 下载&lt;/h3&gt;&lt;p&gt;&lt;code&gt;Download Zip&lt;/code&gt;或者 &lt;code&gt;git clone&lt;/code&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;git clone &lt;a href=&quot;https://github.com/lddahz789/FlashSale.git&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/lddahz789/FlashSale.git&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;2-修改配置文件&quot;&gt;&lt;a href=&quot;#2-修改配置文件&quot; class=&quot;headerlink&quot; title=&quot;2. 修改配置文件&quot;&gt;&lt;/a&gt;2. 修改配置文件&lt;/h3&gt;&lt;p&gt;修改resources下&lt;code&gt;jdbc.propertites&lt;/code&gt;为你的数据库配置&lt;br&gt;修改resources/spring下&lt;code&gt;spring-dao.xml&lt;/code&gt;中&lt;br&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;3&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;4&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;5&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;&amp;lt;!-- 注入RedisDAO --&amp;gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &amp;lt;bean id=&amp;quot;redisDAO&amp;quot; class=&amp;quot;com.flashsale.dao.cache.RedisDAO&amp;quot;&amp;gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    	&amp;lt;constructor-arg index=&amp;quot;0&amp;quot; value=&amp;quot;http://106.14.173.104&amp;quot;/&amp;gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    	&amp;lt;constructor-arg index=&amp;quot;1&amp;quot; value=&amp;quot;6379&amp;quot;/&amp;gt;&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;    &amp;lt;/bean&amp;gt;&lt;/div&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;&lt;/p&gt;
+&lt;p&gt;为你的redis服务器地址或者localhost&lt;/p&gt;
+&lt;h3 id=&quot;3-部署&quot;&gt;&lt;a href=&quot;#3-部署&quot; class=&quot;headerlink&quot; title=&quot;3. 部署&quot;&gt;&lt;/a&gt;3. 部署&lt;/h3&gt;&lt;p&gt;部署项目到tomcat之类的web容器&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注: 如图在web目录下中的js文件中请将此更改为你的项目地址(server.xml中配置的) 或者更改为获取到的contextPath&lt;br&gt;&lt;img src=&quot;http://os3e5ayd1.bkt.clouddn.com/blog/170705/g06dc1BhmD.png?imageslim&quot; alt=&quot;mark&quot;&gt;&lt;br&gt;
     
     </summary>
     
@@ -479,7 +488,7 @@
     <link href="http://yoursite.com/2016/08/22/Java%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
     <id>http://yoursite.com/2016/08/22/Java学习笔记/</id>
     <published>2016-08-22T14:53:53.000Z</published>
-    <updated>2017-07-02T17:02:18.961Z</updated>
+    <updated>2017-07-09T12:27:09.890Z</updated>
     
     <content type="html"><![CDATA[<ol>
 <li>异常捕获时,把需要关闭流的语句写在try()的括号里,之后会自动关闭流,不用再写多余的代码.</li>
@@ -488,7 +497,21 @@
 <li>JSP forward是服务器跳转, redirect是客户端跳转<a id="more"></a></li>
 <li>MyBatis中#与$的区别: #{para}会产生PreparedStatement的占位符 ${something}则直接将花括号里的something插入插入字符串</li>
 <li>接口中方法默认为 public abstract, 变量默认为 public static final</li>
-<li></li>
+<li>深度为k的满二叉树有(2^k)-1个节点,在二叉树的第i个节点上最多有2^(i-1)个节点, 具有 n 个结点的完全二叉树的深度为log(2)(n) +1</li>
+<li>时间复杂度为O(n^2)的插入排序有时非常好用,比如在处理一个接近有序的数组时</li>
+<li><p>~取反运算符运算符. 例如有十进制数10,则~10= -11 (便捷公式~n=-n-1)</p>
+<p><strong>原理</strong><br>计算机本身储存的就是补码：<br>那么10的补码就是10的原码：0000 0000 0000 1010——这是补码，因为现在是计算机在计算<br>~10的补码就是：1111 1111 1111 0101<br>~10的反码就是：1111 1111 1111 0100——补码减1<br>~10的原码就是：1000 0000 0000 1011——反码取反：这个才是正常二进制数，换算为整数为-11</p>
+</li>
+<li><p>两个数值进行二元操作时，会有如下的转换操作：<br>如果两个操作数其中有一个是double类型，另一个操作就会转换为double类型。<br>否则，如果其中一个操作数是float类型，另一个将会转换为float类型。<br>否则，如果其中一个操作数是long类型，另一个会转换为long类型。<br>否则，两个操作数都转换为int类型。</p>
+</li>
+<li><p>Java8 中接口可以有默认方法 用关键字 default, 实现了该接口的类可以选择直接使用或者重写该方法</p>
+</li>
+<li>(数据库中)悲观锁：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。<br>乐观锁：假设不会发生并发冲突，只在提交操作时检查是否违反数据完整性。 乐观锁不能解决脏读的问题。<br>JAVA 独占锁是一种悲观锁，synchronized就是一种独占锁，它假设最坏的情况，并且只有在确保其它线程不会造成干扰的情况下执行，会导致其它所有需要锁的线程挂起，等待持有锁的线程释放锁.<br>乐观锁的概念，他的核心思路就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止.</li>
+<li>volatile关键字的作用: 保证此变量对所有线程的可见性，指一条线程修改了这个变量的值，新值对于其他线程来说是可见的，但并不是多线程安全的,另外一个作用是禁止指令的重排序优化</li>
+</ol>
+<hr>
+<ol>
+<li>线程池的作用：在程序启动的时候就创建若干线程来响应处理，它们被称为线程池，里面的线程叫工作线程<br>第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。<br>第二：提高响应速度。当任务到达时，任务可以不需要等到线程创建就能立即执行。<br>第三：提高线程的可管理性。</li>
 </ol>
 ]]></content>
     
