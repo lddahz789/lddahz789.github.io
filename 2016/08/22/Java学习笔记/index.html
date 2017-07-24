@@ -102,7 +102,7 @@
 <meta property="og:url" content="http://yoursite.com/2016/08/22/Java学习笔记/index.html">
 <meta property="og:site_name" content="Lyn的个人博客">
 <meta property="og:description" content="异常捕获时,把需要关闭流的语句写在try()的括号里,之后会自动关闭流,不用再写多余的代码. 反射:getField 只能获取public的，包括从父类继承来的字段。getDeclaredField 可以获取本类所有的字段，包括private的，但是不能获取继承来的字段. (注： 这里只能获取到private的字段，但并不能访问该private字段的值) JSP SERVLET中 getPara">
-<meta property="og:updated_time" content="2017-07-14T06:49:10.082Z">
+<meta property="og:updated_time" content="2017-07-24T10:56:04.299Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java学习笔记">
 <meta name="twitter:description" content="异常捕获时,把需要关闭流的语句写在try()的括号里,之后会自动关闭流,不用再写多余的代码. 反射:getField 只能获取public的，包括从父类继承来的字段。getDeclaredField 可以获取本类所有的字段，包括private的，但是不能获取继承来的字段. (注： 这里只能获取到private的字段，但并不能访问该private字段的值) JSP SERVLET中 getPara">
@@ -408,9 +408,41 @@
 <li><p>Java8 中接口可以有默认方法 用关键字 default, 实现了该接口的类可以选择直接使用或者重写该方法</p>
 </li>
 <li>(数据库中)悲观锁：假定会发生并发冲突，屏蔽一切可能违反数据完整性的操作。<br>乐观锁：假设不会发生并发冲突，只在提交操作时检查是否违反数据完整性。 乐观锁不能解决脏读的问题。<br>JAVA 独占锁是一种悲观锁，synchronized就是一种独占锁，它假设最坏的情况，并且只有在确保其它线程不会造成干扰的情况下执行，会导致其它所有需要锁的线程挂起，等待持有锁的线程释放锁.<br>乐观锁的概念，他的核心思路就是，每次不加锁而是假设没有冲突而去完成某项操作，如果因为冲突失败就重试，直到成功为止.</li>
-<li>volatile关键字的作用: 保证此变量对所有线程的可见性，指一条线程修改了这个变量的值，新值对于其他线程来说是可见的，但并不是多线程安全的,另外一个作用是禁止指令的重排序优化</li>
-<li>线程池的作用：在程序启动的时候就创建若干线程来响应处理，它们被称为线程池，里面的线程叫工作线程<br>第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。<br>第二：提高响应速度。当任务到达时，任务可以不需要等到线程创建就能立即执行。<br>第三：提高线程的可管理性。</li>
+<li>volatile关键字的作用: 保证此变量对所有线程的可见性，指一条线程修改了这个变量的值，新值对于其他线程来说是可见的，但并不是多线程安全的,另外一个作用是禁止指令的重排序优化<br>如果一个变量是volatile修饰的，JMM会在写入这个字段之后插进一个Write-Barrier指令，并在读这个字段之前插入一个Read-Barrier指令。<br>不管如何重排序,单线程下执行结果不能被改变.编译器、runtime和处理器都必须遵守as-if-serial语义。</li>
+<li>线程池的作用：在程序启动的时候就创建若干线程来响应处理，它们被称为线程池，里面的线程叫工作线程<br>第一：降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。<br>第二：提高响应速度。当任务到达时，任务可以不需要等到线程创建就能立即执行。<br>第三：提高线程的可管理性。<br>线程中的 workQueue<br>用来保存等待被执行的任务的阻塞队列，且任务必须实现Runable接口，在JDK中提供了如下阻塞队列：</li>
+</ol>
+<ul>
+<li>ArrayBlockingQueue：基于数组结构的有界阻塞队列，按FIFO排序任务；</li>
+<li>LinkedBlockingQuene：基于链表结构的阻塞队列，按FIFO排序任务，吞吐量通常要高于ArrayBlockingQuene；</li>
+<li>SynchronousQuene：一个不存储元素的阻塞队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于LinkedBlockingQuene；</li>
+<li>priorityBlockingQuene：具有优先级的无界阻塞队列</li>
+</ul>
+<ol>
 <li>JVM 是如何实现多态的?. 多态允许具体访问时实现方法的动态绑定。Java对于动态绑定的实现主要依赖于方法表。<br>JVM 的方法调用指令有四个，分别是 invokestatic，invokespecial，invokesvirtual 和 invokeinterface。前两个是静态绑定，后两个是动态绑定的。多态就是通过后两个指令实现的。</li>
+<li><p>线程通讯: 线程A和线程B之前需要通信的话，必须经过一下两个步骤：<br><em>线程A把本地内存中更新过的共享变量刷新到主内存中。
+</em>线程B到主内存中读取线程A之前更新过的共享变量。</p>
+</li>
+<li><p>内存溢出和内存泄漏的区别: </p>
+</li>
+</ol>
+<ul>
+<li>内存泄露是指你的应用使用资源之后没有及时释放,导致应用内存中持有了不需要的资源.</li>
+<li>内存溢出是指你的应用的内存已经不能满足正常使用了,堆栈已经达到系统设置的最大值,进而导致崩溃,这事一种结果描述而且通常都是由于内存泄露导致堆栈内存不断增大,从而引发内存溢出。</li>
+</ul>
+<ol>
+<li>数组（英语：Array），是由相同类型的元素（element）的集合所组成的数据结构，分配一块连续的内存来存储。利用元素的索引（index）可以计算出该元素对应的储存地址</li>
+<li>线程进程区别</li>
+</ol>
+<ul>
+<li>一个程序至少有一个进程,一个进程至少有一个线程.</li>
+<li>线程的划分尺度小于进程，使得多线程程序的并发性高。</li>
+<li>另外，进程在执行过程中拥有独立的内存单元，而多个线程共享内存，从而极大地提高了程序的运行效率。</li>
+<li>线程在执行过程中与进程还是有区别的。每个独立的线程有一个程序运行的入口、顺序执行序列和程序的出口。但是线程不能够独立执行，必须依存在应用程序中，由应用程序提供多个线程执行控制。</li>
+<li>从逻辑角度来看，多线程的意义在于一个应用程序中，有多个执行部分可以同时执行。但操作系统并没有将多个线程看做多个独立的应用，来实现进程的调度和管理以及资源分</li>
+</ul>
+<ol>
+<li>synchornized 锁(非公平锁) JVM实现,监视器 monitorenter, monitorexit<br>每个对象有一个监视器锁（monitor）。当monitor被占用时就会处于锁定状态，线程执行monitorenter指令时尝试获取monitor的所有权，过程如下：<br>1、如果monitor的进入数为0，则该线程进入monitor，然后将进入数设置为1，该线程即为monitor的所有者。<br>2、如果线程已经占有该monitor，只是重新进入，则进入monitor的进入数加1.<br>3.如果其他线程已经占用了monitor，则该线程进入阻塞状态，直到monitor的进入数为0，再重新尝试获取monitor的所有权。<br>在资源竞争不是很激烈的情况下，Synchronized的性能要优于ReetrantLock，但是在资源竞争很激烈的情况下，Synchronized的性能会下降几十倍，但是ReetrantLock的性能能维持常态</li>
+<li>Lock的实现 AQS 抽象同步队列</li>
 </ol>
 
       
@@ -700,7 +732,7 @@
 浙ICP备17030264号-1
 </span>
   <div class="powered-by"></div>
-  <span class="post-count">博客全站共6.5k字</span>
+  <span class="post-count">博客全站共7.5k字</span>
 </div>
         
 
